@@ -46,22 +46,6 @@ public class FileUpload extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        int permission = ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // 無權限，向使用者請求
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                    0
-            );
-        }else{
-            //已有權限，執行儲存程式
-        }
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_upload);
 
@@ -72,7 +56,7 @@ public class FileUpload extends Activity implements OnClickListener{
 
         btnselectpic.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
-        upLoadServerUri = "http://140.131.115.73";
+        upLoadServerUri = "http://192.168.1.106";
     }
 
 
@@ -80,10 +64,22 @@ public class FileUpload extends Activity implements OnClickListener{
     public void onClick(View arg0) {
         if(arg0==btnselectpic)
         {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Complete action using"), 1);
+            int permission = ActivityCompat.checkSelfPermission(this,            //將寫入使用者對寫入的權限指定至permission
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {     //檢查是否開啟寫入權限
+                // 無權限，向使用者請求
+                ActivityCompat.requestPermissions(                              //執行完此行後執行onRequestPermissionsResult
+                        this,
+                        new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        0   //requestCode
+                );
+            }else{
+                //已有權限，執行儲存程式
+                pickImage();
+            }
+
+
         }
         else if (arg0==uploadButton) {
 
@@ -91,9 +87,7 @@ public class FileUpload extends Activity implements OnClickListener{
             messageText.setText("uploading started.....");
             new Thread(new Runnable() {
                 public void run() {
-
                     uploadFile(imagepath);
-
                 }
             }).start();
         }
@@ -264,11 +258,20 @@ public class FileUpload extends Activity implements OnClickListener{
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //取得權限，進行檔案存取
+                    pickImage();
                 } else {
-                    //使用者拒絕權限，停用檔案存取功能
+                    //使用者拒絕權限，停用檔案存取功能，並顯示訊息
+                    Toast.makeText(FileUpload.this, "權限不足，無法上傳圖片", Toast.LENGTH_SHORT).show();
                 }
                 return;
         }
+    }
+
+    private void pickImage () {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_PICK);
+        startActivityForResult(Intent.createChooser(intent, "Complete action using"), 1);
     }
 
 
