@@ -1,7 +1,5 @@
 package com.example.photothrow1;
 
-import android.Manifest.permission.*;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,13 +34,13 @@ public class FileUpload extends Activity implements OnClickListener{
 
 
     private TextView messageText;
-    private Button uploadButton, btnselectpic;
-    private ImageView imageview;
+    private Button uploadButton;    //, btnselectpic;
+    private ImageView imageView;
     private int serverResponseCode = 0;
     private ProgressDialog dialog = null;
 
     private String upLoadServerUri = null;
-    private String imagepath=null;
+    private String imagePath =null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -51,10 +49,11 @@ public class FileUpload extends Activity implements OnClickListener{
 
         uploadButton = (Button)findViewById(R.id.uploadButton);
         messageText  = (TextView)findViewById(R.id.messageText);
-        btnselectpic = (Button)findViewById(R.id.button_selectpic);
-        imageview = (ImageView)findViewById(R.id.imageView_pic);
+//        btnselectpic = (Button)findViewById(R.id.button_selectpic);
+        imageView = (ImageView)findViewById(R.id.imageView_pic);
 
-        btnselectpic.setOnClickListener(this);
+//        btnselectpic.setOnClickListener(this);
+        imageView.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
         upLoadServerUri = "http://192.168.1.106";
     }
@@ -62,7 +61,7 @@ public class FileUpload extends Activity implements OnClickListener{
 
     @Override
     public void onClick(View arg0) {
-        if(arg0==btnselectpic)
+        if(arg0==imageView)
         {
             int permission = ActivityCompat.checkSelfPermission(this,            //將寫入使用者對寫入的權限指定至permission
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -87,7 +86,7 @@ public class FileUpload extends Activity implements OnClickListener{
             messageText.setText("uploading started.....");
             new Thread(new Runnable() {
                 public void run() {
-                    uploadFile(imagepath);
+                    uploadFile(imagePath);
                 }
             }).start();
         }
@@ -101,10 +100,10 @@ public class FileUpload extends Activity implements OnClickListener{
             //Bitmap photo = (Bitmap) data.getData().getPath();
 
             Uri selectedImageUri = data.getData();
-            imagepath = getPath(selectedImageUri);
-            Bitmap bitmap=BitmapFactory.decodeFile(imagepath);
-            imageview.setImageBitmap(bitmap);
-            messageText.setText("Uploading file path:" +imagepath);
+            imagePath = getPath(selectedImageUri);
+            Bitmap bitmap=BitmapFactory.decodeFile(imagePath);
+            imageView.setImageBitmap(bitmap);
+            messageText.setText("Uploading file path:" + imagePath);
 
         }
     }
@@ -135,11 +134,11 @@ public class FileUpload extends Activity implements OnClickListener{
 
             dialog.dismiss();
 
-            Log.e("uploadFile", "Source File not exist :"+imagepath);
+            Log.e("uploadFile", "Source File not exist :"+ imagePath);
 
             runOnUiThread(new Runnable() {
                 public void run() {
-                    messageText.setText("Source File not exist :"+ imagepath);
+                    messageText.setText("Source File not exist :"+ imagePath);
                 }
             });
 
