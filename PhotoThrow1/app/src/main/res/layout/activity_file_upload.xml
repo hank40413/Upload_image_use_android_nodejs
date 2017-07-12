@@ -4,35 +4,52 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        tools:context=".FileUpload">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView_pic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_launcher" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-    <!--<Button-->
+        <ImageView
+            android:id="@+id/imageView_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher" />
+
+        <!--<Button-->
         <!--android:id="@+id/button_selectpic"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:text="Select Picture" />-->
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Click To Upload File"
-        android:id="@+id/uploadButton"
-        />
+        <Button
+            android:id="@+id/uploadButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Click To Upload File" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text=""
-        android:id="@+id/messageText"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        />
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="#000000"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,6 +44,10 @@ public class FileUpload extends Activity implements OnClickListener{
 
     private String upLoadServerUri = null;
     private String imagePath =null;
+
+    private HorizontalScrollAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -56,6 +63,17 @@ public class FileUpload extends Activity implements OnClickListener{
         imageView.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
         upLoadServerUri = "http://192.168.1.106";
+
+        ArrayList<String> myDataset = new ArrayList<>();
+        for(int i = 0; i < 6; i++){
+            myDataset.add(Integer.toString(i));
+        }
+        mAdapter = new HorizontalScrollAdapter(myDataset);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_view);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
 
@@ -107,6 +125,7 @@ public class FileUpload extends Activity implements OnClickListener{
 
         }
     }
+
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
