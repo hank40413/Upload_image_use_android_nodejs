@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-/**
- * Created by ntub106403 on 2017/7/12.
- */
 
-public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScrollAdapter.ViewHolder>{
+public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder>{
+        public static final int ACTIVITY_FILE_UPLOAD = 0;
+        public static final int GALLERY = 1;
+
         private List<String> mData;
+        private int whichView;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             //            public TextView mTextView;
@@ -22,21 +23,32 @@ public class HorizontalScrollAdapter extends RecyclerView.Adapter<HorizontalScro
             }
         }
 
-        public HorizontalScrollAdapter(List<String> data) {
+        public ScrollAdapter(List<String> data, int whichView) {
             mData = data;
+            this.whichView = whichView;
         }
 
         @Override
-        public HorizontalScrollAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item, parent, false);
+        public ScrollAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v;
+
+            switch (whichView) {
+                case GALLERY:
+                    v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.gallery_item, parent, false);
+                    break;
+                default:
+                    v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.activity_file_upload_item, parent, false);
+                    break;
+            }
             ViewHolder vh = new ViewHolder(v);
             return vh;
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-//            holder.mTextView.setText(mData.get(position));
+////            holder.mTextView.setText(mData.get(position));
 //            holder.itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {

@@ -37,7 +37,7 @@ public class FileUpload extends Activity implements OnClickListener{
 
 
     private TextView messageText;
-    private Button uploadButton;    //, btnselectpic;
+    private Button uploadButton, btnselectpic;
     private ImageView imageView;
     private int serverResponseCode = 0;
     private ProgressDialog dialog = null;
@@ -45,7 +45,7 @@ public class FileUpload extends Activity implements OnClickListener{
     private String upLoadServerUri = null;
     private String imagePath =null;
 
-    private HorizontalScrollAdapter mAdapter;
+    private ScrollAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -56,10 +56,11 @@ public class FileUpload extends Activity implements OnClickListener{
 
         uploadButton = (Button)findViewById(R.id.uploadButton);
         messageText  = (TextView)findViewById(R.id.messageText);
-//        btnselectpic = (Button)findViewById(R.id.button_selectpic);
+        btnselectpic = (Button)findViewById(R.id.button_selectpic);
         imageView = (ImageView)findViewById(R.id.imageView_pic);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_view);
 
-//        btnselectpic.setOnClickListener(this);
+        btnselectpic.setOnClickListener(this);
         imageView.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
         upLoadServerUri = "http://192.168.1.106";
@@ -68,8 +69,7 @@ public class FileUpload extends Activity implements OnClickListener{
         for(int i = 0; i < 6; i++){
             myDataset.add(Integer.toString(i));
         }
-        mAdapter = new HorizontalScrollAdapter(myDataset);
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_view);
+        mAdapter = new ScrollAdapter(myDataset, ScrollAdapter.ACTIVITY_FILE_UPLOAD);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -79,7 +79,7 @@ public class FileUpload extends Activity implements OnClickListener{
 
     @Override
     public void onClick(View arg0) {
-        if(arg0==imageView)
+        if(arg0 == imageView)
         {
             int permission = ActivityCompat.checkSelfPermission(this,            //將寫入使用者對寫入的權限指定至permission
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -98,7 +98,7 @@ public class FileUpload extends Activity implements OnClickListener{
 
 
         }
-        else if (arg0==uploadButton) {
+        else if (arg0 == uploadButton) {
 
             dialog = ProgressDialog.show(FileUpload.this, "", "Uploading file...", true);
             messageText.setText("uploading started.....");
@@ -107,6 +107,13 @@ public class FileUpload extends Activity implements OnClickListener{
                     uploadFile(imagePath);
                 }
             }).start();
+        }
+        else if (arg0 == btnselectpic) {
+            Intent intent = new Intent();
+            intent.setClass(FileUpload.this, Gallery.class);
+            startActivity(intent);
+            Toast.makeText(FileUpload.this, "跳轉至Gallery", Toast.LENGTH_SHORT).show();
+//            FileUpload.this.finish();
         }
 
     }
